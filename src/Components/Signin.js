@@ -8,7 +8,7 @@ export default function Signin(){
             <Input placeholder="E-mail"/>
             <Input placeholder="Senha"/>
             <Botao>Entrar</Botao>
-            <Link to="/signup">
+            <Link to="/sign-up">
                 <Texto>Primeira vez? Cadastre-se</Texto>
             </Link>
         </Principal>
