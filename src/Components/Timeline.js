@@ -1,25 +1,48 @@
 import { MdExitToApp } from 'react-icons/md';
 import { CgAdd, CgRemove } from 'react-icons/cg';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 export default function Timeline(){
+    const history = useHistory();
+    const lancamentos = [ 
+    {id: 1, valor: 5.40, descricao: "blacla",operacao: "entrada", dataOperacao: "2021-10-04", idUsuario: 2},
+    {id: 2, valor: 5.40, descricao: "blacla", operacao: "entrada", dataOperacao: "2021-10-04", idUsuario: 1},
+    {id: 3, valor: 5.40, descricao: "blacla", operacao: "saida"  , dataOperacao: "2021-10-04", idUsuario: 1}
+    ]
+    
+    function entrada(){
+        history.push("/entrada");
+    }
+    function saida(){
+        history.push("/saida");
+    }
     return (
         <Principal>
             <Header>
                 <Nome>Olá, fulano</Nome>
                 <MdExitToApp/>
             </Header>
-            <Wallet> 
-                <Texto>Não há registros de entrada ou saída</Texto>
+            <Wallet>
+                {lancamentos.length === 0 ? 
+                <Texto>Não há registros de entrada ou saída</Texto>: 
+                lancamentos.map(item=> 
+                    <Registros key={item.id}>
+                        <Data>{item.dataOperacao}</Data>
+                        <Descricao>{item.descricao}</Descricao>
+                        <Valor color={item.operacao === "entrada" ? '#03AC00':'#C70000'}>{item.valor}</Valor>
+                    </Registros>
+                )
+                }
             </Wallet>
             <Footer>
-                <Botao>
+                <Botao onClick = {entrada}>
                     <InsideButton>
                         <CgAdd/>
                         Nova entrada
                     </InsideButton>
                 </Botao>
-                <Botao>
-                <InsideButton>
+                <Botao onClick={saida}> 
+                    <InsideButton>
                         <CgRemove/>
                         Nova saída
                     </InsideButton>
@@ -28,6 +51,32 @@ export default function Timeline(){
         </Principal>
     );
 }
+const Descricao = styled.p`
+  color: #000000;
+  flex-grow: 1;
+  text-overflow: ellipsis;
+  word-wrap: none;
+  margin-left: 8px;
+  word-break: break-word;
+  margin-right: 5px;
+`;
+const Valor = styled.p`
+    color: ${props => props.color};
+    flex-shrink: 0;
+`
+const Data = styled.p`
+    color: #C6C6C6;
+    flex-shrink: 0;
+`;
+const Registros = styled.div`
+    width: 100%;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    justify-content: space-between;
+    display: flex;
+    flex-shrink: 0;
+    margin: 10px;
+`
 const Texto = styled.p`
     font-family: 'Raleway', sans-serif;
     font-weight: normal;

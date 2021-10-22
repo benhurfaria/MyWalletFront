@@ -5,10 +5,10 @@ export default function Signup(){
     return (
         <Principal>
             <Titulo/>
-            <Input placeholder="Nome"/>
-            <Input placeholder="E-mail"/>
-            <Input placeholder="Senha"/>
-            <Input placeholder="Confirme a senha"/>
+            <Input placeholder="Nome" type="text"/>
+            <Input placeholder="E-mail"type="email"/>
+            <Input placeholder="Senha" type="password"/>
+            <Input placeholder="Confirme a senha" type="password"/>
             <Botao>Cadastrar</Botao>
             <Link to="/">
                 <Texto>Já tem uma conta? Entre agora!</Texto>

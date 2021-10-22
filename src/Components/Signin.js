@@ -5,8 +5,8 @@ export default function Signin(){
     return(
         <Principal>
             <Titulo/>
-            <Input placeholder="E-mail"/>
-            <Input placeholder="Senha"/>
+            <Input placeholder="E-mail" type="email"/>
+            <Input placeholder="Senha" type="password"/>
             <Botao>Entrar</Botao>
             <Link to="/sign-up">
                 <Texto>Primeira vez? Cadastre-se</Texto>
