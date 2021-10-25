@@ -6,6 +6,7 @@ import { ContextLogin } from './Context';
 import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { getStoredUser } from './Persistencia';
 export default function Timeline(){
     const {loggedUser} = useContext(ContextLogin);
     const [lancamento, setLancamento] = useState([]);
@@ -13,11 +14,10 @@ export default function Timeline(){
     const history = useHistory();
     const config = {
         headers:{
-            Authorization: `Bearer ${loggedUser.token}`
+            Authorization: `Bearer ${getStoredUser().token}`
         }
     }
     useEffect(()=>{
-        
         const promise = axios.get("http://localhost:4000/infos", config);
         promise.then(resp=>{
             setLancamento(resp.data.dados);
@@ -33,6 +33,7 @@ export default function Timeline(){
     function logout(){
         const promessa = axios.delete("http://localhost:4000/signout", config);
         promessa.then(resp=>{
+            localStorage.clear();
             history.push("/");
         }).catch(err=>{
             alert("servidor fora de área");
@@ -42,7 +43,7 @@ export default function Timeline(){
     return (
         <Principal>
             <Header>
-                <Nome>Olá, {loggedUser.nome}</Nome>
+                <Nome>Olá, {getStoredUser().nome}</Nome>
                 <MdExitToApp onClick={logout}/>
             </Header>
             <Wallet>

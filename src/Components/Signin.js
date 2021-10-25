@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import Titulo from "./Titulo";
 import {Link, useHistory} from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { ContextLogin } from './Context';
-
+import { storeUser, getStoredUser } from "./Persistencia";
 
 export default function Signin(){
-    const {setLoggedUser} = useContext(ContextLogin);
+    const {loggedUser, setLoggedUser} = useContext(ContextLogin);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const history = useHistory();
@@ -19,6 +19,8 @@ export default function Signin(){
         const promise = axios.post("http://localhost:4000/signin", body);
         promise.then(resp=>{
             setLoggedUser(resp.data);
+            storeUser(resp.data);
+            setLoggedUser(resp.data);
             history.push("/timeline");
         }).catch(err=>{
             if(err.response.status === 401){
@@ -26,7 +28,10 @@ export default function Signin(){
             }
         });
     }
-
+    useEffect(()=>{
+        const user = getStoredUser();
+        user ? history.push("/timeline") : history.push("/");
+    },[history])
     return(
         <Principal>
             <Titulo/>
