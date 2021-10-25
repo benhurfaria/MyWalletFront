@@ -1,15 +1,48 @@
 import styled from "styled-components";
 import Titulo from "./Titulo";
 import {Link} from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { useHistory } from 'react-router';
+
 export default function Signup(){
+    const [nome, setNome] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirm, setConfirm] = useState("");
+    const [email, setEmail] = useState("");
+    const history = useHistory();
+    function cadastro(){
+        const body={
+            nome,
+            email,
+            password
+        }
+        if(password === confirm){
+            const promise = axios.post("http://localhost:4000/signup", body);
+            promise.then(resp=>{
+                alert("cadastro feito com sucesso");
+                history.push("/");
+            }).catch(err=>{
+                if(err.response.status === 400){
+                    alert("email ja cadastrado");
+                }
+                if(err.response.status === 500){
+                    alert("servidor fora de área");
+                }
+            })
+        }else{
+            alert("Senhas diferentes");
+        }
+    }
+
     return (
         <Principal>
             <Titulo/>
-            <Input placeholder="Nome" type="text"/>
-            <Input placeholder="E-mail"type="email"/>
-            <Input placeholder="Senha" type="password"/>
-            <Input placeholder="Confirme a senha" type="password"/>
-            <Botao>Cadastrar</Botao>
+            <Input placeholder="Nome" type="text" value={nome} onChange={e=>setNome(e.target.value)}/>
+            <Input placeholder="E-mail"type="email" value={email} onChange={e=>setEmail(e.target.value)}/>
+            <Input placeholder="Senha" type="password" value={password} onChange={e=>setPassword(e.target.value)}/>
+            <Input placeholder="Confirme a senha" type="password" value={confirm} onChange={e=>setConfirm(e.target.value)}/>
+            <Botao onClick={cadastro}>Cadastrar</Botao>
             <Link to="/">
                 <Texto>Já tem uma conta? Entre agora!</Texto>
             </Link>

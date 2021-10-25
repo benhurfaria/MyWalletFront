@@ -20,6 +20,10 @@ export default function Signin(){
         promise.then(resp=>{
             setLoggedUser(resp.data);
             history.push("/timeline");
+        }).catch(err=>{
+            if(err.response.status === 401){
+                alert("Conta nao cadastrada");
+            }
         });
     }
 

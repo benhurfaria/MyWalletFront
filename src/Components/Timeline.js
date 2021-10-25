@@ -30,12 +30,20 @@ export default function Timeline(){
     function saida(){
         history.push("/saida");
     }
-    
+    function logout(){
+        const promessa = axios.delete("http://localhost:4000/signout", config);
+        promessa.then(resp=>{
+            history.push("/");
+        }).catch(err=>{
+            alert("servidor fora de área");
+        })
+        
+    }
     return (
         <Principal>
             <Header>
                 <Nome>Olá, {loggedUser.nome}</Nome>
-                <MdExitToApp/>
+                <MdExitToApp onClick={logout}/>
             </Header>
             <Wallet>
                 {lancamento.length === 0 ? 
