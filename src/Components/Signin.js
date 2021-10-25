@@ -1,13 +1,34 @@
 import styled from "styled-components";
 import Titulo from "./Titulo";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import { useState, useContext } from "react";
+import axios from "axios";
+import { ContextLogin } from './Context';
+
+
 export default function Signin(){
+    const {setLoggedUser} = useContext(ContextLogin);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const history = useHistory();
+    function login(){
+        const body = {
+            email,
+            password
+        }
+        const promise = axios.post("http://localhost:4000/signin", body);
+        promise.then(resp=>{
+            setLoggedUser(resp.data);
+            history.push("/timeline");
+        });
+    }
+
     return(
         <Principal>
             <Titulo/>
-            <Input placeholder="E-mail" type="email"/>
-            <Input placeholder="Senha" type="password"/>
-            <Botao>Entrar</Botao>
+            <Input placeholder="E-mail" type="email" value={email} onChange={e=> setEmail(e.target.value)}/>
+            <Input placeholder="Senha" value={password} onChange={e=>setPassword(e.target.value)} type="password"/>
+            <Botao onClick={login}>Entrar</Botao>
             <Link to="/sign-up">
                 <Texto>Primeira vez? Cadastre-se</Texto>
             </Link>

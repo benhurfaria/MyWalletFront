@@ -2,37 +2,57 @@ import { MdExitToApp } from 'react-icons/md';
 import { CgAdd, CgRemove } from 'react-icons/cg';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
+import { ContextLogin } from './Context';
+import React, { useState, useEffect, useContext } from "react";
+import axios from 'axios';
+import dayjs from 'dayjs';
 export default function Timeline(){
+    const {loggedUser} = useContext(ContextLogin);
+    const [lancamento, setLancamento] = useState([]);
+    const [total, setTotal] = useState(0);
     const history = useHistory();
-    const lancamentos = [ 
-    {id: 1, valor: 5.40, descricao: "blacla",operacao: "entrada", dataOperacao: "2021-10-04", idUsuario: 2},
-    {id: 2, valor: 5.40, descricao: "blacla", operacao: "entrada", dataOperacao: "2021-10-04", idUsuario: 1},
-    {id: 3, valor: 5.40, descricao: "blacla", operacao: "saida"  , dataOperacao: "2021-10-04", idUsuario: 1}
-    ]
-    
+    const config = {
+        headers:{
+            Authorization: `Bearer ${loggedUser.token}`
+        }
+    }
+    useEffect(()=>{
+        
+        const promise = axios.get("http://localhost:4000/infos", config);
+        promise.then(resp=>{
+            setLancamento(resp.data.dados);
+            setTotal(resp.data.soma);
+        })
+    },[]);
     function entrada(){
         history.push("/entrada");
     }
     function saida(){
         history.push("/saida");
     }
+    
     return (
         <Principal>
             <Header>
-                <Nome>Olá, fulano</Nome>
+                <Nome>Olá, {loggedUser.nome}</Nome>
                 <MdExitToApp/>
             </Header>
             <Wallet>
-                {lancamentos.length === 0 ? 
+                {lancamento.length === 0 ? 
                 <Texto>Não há registros de entrada ou saída</Texto>: 
-                lancamentos.map(item=> 
+                lancamento.map(item=> 
                     <Registros key={item.id}>
-                        <Data>{item.dataOperacao}</Data>
+                        <Data>{dayjs(item.dataoperacao).format('DD/MM')}</Data>
                         <Descricao>{item.descricao}</Descricao>
                         <Valor color={item.operacao === "entrada" ? '#03AC00':'#C70000'}>{item.valor}</Valor>
                     </Registros>
+                    
                 )
                 }
+                <Total color={total >= 0 ? '#03AC00' : '#C70000'}>
+                    SALDO
+                    <span>{total}</span>
+                </Total>
             </Wallet>
             <Footer>
                 <Botao onClick = {entrada}>
@@ -51,6 +71,26 @@ export default function Timeline(){
         </Principal>
     );
 }
+const Total = styled.div`
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+    font-size: 17px;
+    height: 30px;
+    color: #000000;
+    border-radius: 0 5px;
+    padding: 5px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    span{
+        text-align: right;
+        color: ${props => props.color};
+    }
+`;
 const Descricao = styled.p`
   color: #000000;
   flex-grow: 1;
@@ -132,11 +172,13 @@ const Wallet = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 `
 const Principal = styled.div`
     width: 100%;
     height: 100%;
     padding: 3px 30px;
+    position: relative;
 `;
 const Header = styled.div`
     display: flex;

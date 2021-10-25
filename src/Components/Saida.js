@@ -1,14 +1,45 @@
 import styled from "styled-components";
-
-export default function Entrada(){
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { ContextLogin } from "./Context";
+import { useHistory } from 'react-router';
+export default function Saida(){
+    const {loggedUser} = useContext(ContextLogin);
+    const [valor, setValor] = useState("");
+    const [descricao, setDescricao] = useState("");
+    const history = useHistory();
+    
+    function salvarSaida(){
+        const config = {
+            headers:{
+                Authorization: `Bearer ${loggedUser.token}`
+            }
+        }
+        const body1 = {
+            operacao: "saida",
+            valor,
+            descricao
+        }
+        const body ={
+            ...body1,
+            valor: body1.valor.replace(",",".")
+        }
+        if(!isNaN(body.valor)){
+        const promise = axios.post("http://localhost:4000/infos",body, config);
+        promise.then(resp=>{
+            history.push("/timeline");
+        })}else{
+            alert("Valor inválido");
+        }
+    }
     return (
         <Principal>
             <Header>
                 <Nome>Nova Saida</Nome>
             </Header>
-            <Input placeholder="Valor"/>
-            <Input placeholder="Descrição"/>
-            <Botao>Salvar entrada</Botao>
+            <Input placeholder="Valor" value={valor} onChange={e=> setValor(e.target.value)}/>
+            <Input placeholder="Descrição" value={descricao} onChange={e => setDescricao(e.target.value)}/>
+            <Botao onClick={salvarSaida}>Salvar entrada</Botao>
         </Principal>
     );
 }
