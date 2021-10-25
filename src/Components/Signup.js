@@ -17,7 +17,9 @@ export default function Signup(){
             email,
             password
         }
-        if(password === confirm){
+        if(password.length === 0){
+            alert("vc precisa digitar senha");
+        }else if(password === confirm){
             const promise = axios.post("http://localhost:4000/signup", body);
             promise.then(resp=>{
                 alert("cadastro feito com sucesso");
