@@ -13,3 +13,9 @@
 
 ### Uso:
 <img src="./assets/uso.gif" height="400"/>
+
+# Tecnologies
+
+- Html
+- CSS
+- Javascript || ReactJS || Axios
