@@ -6,7 +6,7 @@
 
 ### Agora basta rodar a aplicação com npm start
 
-<img src="./assets/start.git" height="400"/>
+<img src="./assets/start.gif" height="400"/>
 
 ### Porém, antes de usar a aplicação, siga as instruções do backend do projeto em: 
 ### https://github.com/benhurfaria/mywalletback
