@@ -1,19 +1,15 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export default function Titulo(){
-    return (
-        <Title>
-            MyWallet
-        </Title>
-    );
+export default function Titulo() {
+  return <Title>MyWallet</Title>;
 }
 
 const Title = styled.h1`
-    font-family: 'Saira Stencil One', cursive;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 32px;
-    color: #FFFFFF;
-    text-align: center;
-    margin: 14px;
+  font-family: 'Saira Stencil One', cursive;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 32px;
+  color: #ffffff;
+  text-align: center;
+  margin: 14px;
 `;
