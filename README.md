@@ -10,3 +10,6 @@
 
 ### Porém, antes de usar a aplicação, siga as instruções do backend do projeto em: 
 ### https://github.com/benhurfaria/mywalletback
+
+### Uso:
+<img src="./assets/uso.gif" height="400"/>
